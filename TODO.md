@@ -1,0 +1,2 @@
+- as a user, I shall be able to upload a sc2 build order text snippet
+- as a user, I shall be able to view build oirders bases on match up
