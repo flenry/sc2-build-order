@@ -8,12 +8,16 @@ import {
 
 export const buildsRouter = createTRPCRouter({
   createBuild: publicProcedure
-    .input(z.object({ text: z.string(), buildOrder: z.string() }))
-    .mutation(({ input }) => {
+    .input(z.object({ matchUp: z.string(), build: z.string() }))
+    .mutation(async ({ input, ctx }) => {
       // TODO: save to the database
-      return {
-        greeting: `Hello ${input.text}`,
-      };
+
+      const build = await ctx.prisma.buildOrder.create({
+        data: {
+          ...input,
+        },
+      });
+      return build;
     }),
 
   getSecretMessage: protectedProcedure.query(() => {

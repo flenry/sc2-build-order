@@ -5,9 +5,10 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 import { useState } from "react";
+import { appRouter } from "~/server/api/root";
 
 const Home: NextPage = () => {
-  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const createBuildMutation = appRouter.builds.createBuild.useMutation();
   const [matchUp, setMatchUp] = useState("");
   const [buildOrder, setBuildOrder] = useState("");
 
