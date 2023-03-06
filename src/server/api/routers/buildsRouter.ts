@@ -1,14 +1,15 @@
 import { z } from "zod";
 
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const buildsRouter = createTRPCRouter({
   createBuild: publicProcedure
-    .input(z.object({ matchUp: z.string(), build: z.string() }))
+    .input(
+      z.object({
+        matchUp: z.string(),
+        build: z.string(),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
       // TODO: save to the database
 
@@ -19,8 +20,4 @@ export const buildsRouter = createTRPCRouter({
       });
       return build;
     }),
-
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
 });

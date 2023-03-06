@@ -6,14 +6,22 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { useState } from "react";
 import { appRouter } from "~/server/api/root";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
-  const createBuildMutation = appRouter.builds.createBuild.useMutation();
+  const createBuildMutation = api.builds.createBuild.useMutation();
   const [matchUp, setMatchUp] = useState("");
-  const [buildOrder, setBuildOrder] = useState("");
+  const [build, setBuildOrder] = useState("");
 
-  function handleSubmitBuildOrder(e: React.FormEvent) {
+  const router = useRouter();
+
+  async function handleSubmitBuildOrder(e: React.FormEvent) {
     e.preventDefault();
+    await createBuildMutation.mutateAsync({
+      matchUp,
+      build,
+    });
+    router.push("/");
   }
 
   return (
@@ -24,35 +32,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <h1>Submit a Build Order</h1>
-        <form className="flex flex-col gap-4" onSubmit={handleSubmitBuildOrder}>
-          <label htmlFor="match-up-select">Match up</label>
-          <select
-            className="text-black"
-            value={matchUp}
-            // onSelect={(e) => setMatchUp(e.target.value)}
-            onChange={(e) => setMatchUp(e.target.value)}
-            id="match-up-select"
-          >
-            <option value="zvt">ZvT</option>
-            <option value="zvp">ZvP</option>
-            <option value="zvz">ZvZ</option>
-
-            <option value="pvt">PvT</option>
-            <option value="pvp">PvP</option>
-            <option value="pvz">PvT</option>
-
-            <option value="tvt">TvT</option>
-            <option value="tvp">TvP</option>
-            <option value="tvz">TvZ</option>
-          </select>
-        </form>
-        <textarea
-          className="bg-white p-2 text-black"
-          value={buildOrder}
-          onChange={(e) => setBuildOrder(e.target.value)}
-        />
-        <button>submit</button>
+        <h1>Welcome to SC2 Build Order Manager</h1>
+        <Link href="/submit-build">Submit a new Build</Link>
       </main>
     </>
   );
